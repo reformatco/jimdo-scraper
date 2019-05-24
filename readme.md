@@ -1,6 +1,6 @@
 # Jimdo scraper using Node.js
 
-Initial experiment using (cheerio)[https://github.com/cheeriojs/cheerio] and (sanitize-html)[https://github.com/apostrophecms/sanitize-html] to scrape a Jimdo blog enabling you to export content to another CMS.
+Initial experiment using [cheerio](https://github.com/cheeriojs/cheerio) and [sanitize-html](https://github.com/apostrophecms/sanitize-html) to scrape a Jimdo blog enabling you to export content to another CMS.
 
 ## To do
 - scrape pagination
