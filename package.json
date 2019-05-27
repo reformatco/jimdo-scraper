@@ -1,22 +1,30 @@
 {
-  "name": "Jimdo scraper using Node.js",
+  "name": "jimdo-scraper",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon ./src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "nodemonConfig": {
+    "ignore": [
+      "*.json"
+    ]
+  },
   "dependencies": {
     "axios": "^0.18.0",
+    "chalk": "^2.4.2",
     "cheerio": "^1.0.0-rc.3",
+    "nodemon": "^1.19.0",
     "sanitize-html": "^1.20.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3"
+    "babel-core": "^6.26.3",
+    "request-promise": "^4.2.4"
   }
 }
