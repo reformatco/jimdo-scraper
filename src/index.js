@@ -1,32 +1,42 @@
-const axios = require('axios')
-const cheerio = require('cheerio')
-const fs = require('fs')
-const chalk = require('chalk')
+import cheerio from 'cheerio'
+import axios from 'axios'
+import fs from 'fs'
+import chalk from 'chalk'
+import { resolve } from 'url'
+import getPageContent from './pagecontent'
 
-const url = 'http://listverse.com/'
+const base = 'https://www.4vultures.org/news/'
 const outputFile = './dist/data.json'
 const parsedResults = []
-const pageLimit = 10
+const pageLimit = 1
 let pageCounter = 0
 let resultCount = 0
 
-console.log(chalk.yellow.bgBlue(`\n  Scraping of ${chalk.underline.bold(url)} initiated...\n`))
+const selectors = {
+  article: '.blogselection .j-blogarticle',
+  link: 'h2 a'
+}
+
+console.log(chalk.yellow.bgBlue(`\n  Scraping of ${chalk.underline.bold(base)} initiated...\n`))
 
 const getWebsiteContent = async (url) => {
   try {
     const response = await axios.get(url)
     const $ = cheerio.load(response.data)
+    const isHomePage = url === base;
 
-    $('.wrapper .main .new article').map((i, el) => {
-        const count = resultCount++
-        const title = $(el).find('a').attr('href')
-        const url = $(el).find('h3').text()
-        // const content = $(el).html()
-        
+    const getFullUrl = link => base.substring(0,base.length - 6) + link;
+
+    $(selectors.article).map((i, el) => {
+        const url = resolve(base, $(el).find(selectors.link).attr('href'))
+        const postData = getPageContent(url)
+        // async awaits wtf
         const metadata = {
-            count: count,
-            title: title,
-            url: url
+            title: postData.title,
+            date: postData.date,
+            url: url,
+            content: postData.content,
+            tags: postData.tags
         }
         parsedResults.push(metadata)
     })
@@ -43,14 +53,20 @@ const getWebsiteContent = async (url) => {
         })
     }
 
-    // Pagination Elements Link
-    const nextPageLink = $('.pagination').find('.curr').parent().next().find('a').attr('href')
-    console.log(chalk.cyan(`  Scraping: ${nextPageLink}`))
+    // if on first page no current link in sidebar
+    let nextPageLink;
+    if (!isHomePage) {
+      nextPageLink = resolve(base, $('#mainNav2').find('.current').parent().next().find('a').attr('href'))
+    } else {
+      nextPageLink = resolve(base, $('#mainNav2').children().first().find('a').attr('href'))
+    }
     pageCounter++
 
     if (pageCounter === pageLimit) {
       exportResults(parsedResults)
       return false
+    } else {
+      console.log(chalk.cyan(`  Scraping: ${nextPageLink}`))
     }
 
     getWebsiteContent(nextPageLink)
@@ -61,3 +77,4 @@ const getWebsiteContent = async (url) => {
   }
 }
 
+getWebsiteContent(base);
