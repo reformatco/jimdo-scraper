@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import { resolve } from 'url'
 import getPageContent from './pagecontent'
 
-const base = 'https://www.4vultures.org/news/'
+const base = 'https://www.4vultures.org/news/news-2019-2nd-quarter/'
 const outputFile = './dist/data.json'
 const parsedResults = []
 const pageLimit = 1

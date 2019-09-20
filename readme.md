@@ -9,4 +9,8 @@ Initial experiment using [cheerio](https://github.com/cheeriojs/cheerio) and [sa
 - iterate through each blog post saving data into
   - single json file
   - separate json files
-- download source images within the post and change reference in post object
+
+## into wp
+- create post with title
+- make first image element the featured image
+- import
